@@ -1,3 +1,3 @@
-# git_test
+# git-test
 My first GitHub repo!
 Edited
