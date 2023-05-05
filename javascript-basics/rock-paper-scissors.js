@@ -3,7 +3,7 @@
 function getComputerChoice() {
     const randomNumber = Math.floor(Math.random() * 3);
     let choice;
-    
+
     switch (randomNumber) {
         case 0:
             choice = 'Rock';
@@ -22,34 +22,32 @@ let computerScore = 0;
 let playerScore = 0;
 
 function playRound(playerSelection, computerSelection) {
-
     if (computerSelection === playerSelection) {
         return {
-            code: "draw",
-            message: "Draw! (" + computerSelection + ")"
+            code: 'draw',
+            message: `Draw! (${computerSelection})`,
         };
     }
 
-    if (computerSelection === 'Rock' && playerSelection == 'Scissors'
-        || computerSelection === 'Paper' && playerSelection == 'Rock'
-        || computerSelection === 'Scissors' && playerSelection == 'Paper') {
-
+    if (computerSelection === 'Rock' && playerSelection === 'Scissors'
+        || computerSelection === 'Paper' && playerSelection === 'Rock'
+        || computerSelection === 'Scissors' && playerSelection === 'Paper') {
         computerScore++;
         return {
-            code: "loss",
-            message: "You lose! " + computerSelection + " beats " + playerSelection
+            code: 'loss',
+            message: `You lose! ${computerSelection} beats ${playerSelection}`,
         };
     }
 
     playerScore++;
     return {
-        code: "win",
-        message: "You win! " + playerSelection + " beats " + computerSelection
+        code: 'win',
+        message: `You win! ${playerSelection} beats ${computerSelection}`,
     };
 }
 
-let resultDiv = document.querySelector('div[id=result]');
-let resultMsgDiv = document.createElement('div');
+const resultDiv = document.querySelector('div[id=result]');
+const resultMsgDiv = document.createElement('div');
 resultDiv.appendChild(resultMsgDiv);
 resultDiv.appendChild(document.createElement('br'));
 
@@ -57,21 +55,20 @@ function game() {
     if (playerScore < 5 && computerScore < 5) {
         const result = playRound(this.id, getComputerChoice());
 
-        resultMsgDiv.textContent = "SCORE: you: " + playerScore + ", computer: " + computerScore;
+        resultMsgDiv.textContent = `SCORE: you: ${playerScore}, computer: ${computerScore}`;
 
-        let div = document.createElement('div');
+        const div = document.createElement('div');
         div.textContent = result.message;
         div.classList.add(result.code);
         resultDiv.appendChild(div);
 
         if (playerScore === 5 || computerScore === 5) {
-            resultMsgDiv.textContent = "GAME OVER: "
-                + (playerScore > computerScore ? "you" : "computer") + " won.";
+            resultMsgDiv.textContent = `GAME OVER: ${playerScore > computerScore ? 'you' : 'computer'} won.`;
         }
     }
 }
 
-let buttons = document.querySelectorAll('button');
-buttons.forEach(button => {
+const buttons = document.querySelectorAll('button');
+buttons.forEach((button) => {
     button.addEventListener('click', game);
 });
