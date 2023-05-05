@@ -57,8 +57,7 @@ function task5() {
 }
 
 // TASK 6, Extendable calculator
-// https://javascript.info/array-methods#tasks
-// TODO finish tasks 6-13
+// TODO: implement
 
 // Map to names
 function task7() {
@@ -71,7 +70,7 @@ function task7() {
 }
 
 // TASK 8, Map to objects
-// TODO
+// TODO: implement
 
 // Sort users by age
 function task9() {
@@ -89,7 +88,7 @@ function task9() {
 }
 
 // TASK 10, Shuffle an array
-// TODO
+// TODO: implement
 
 // Get average age
 function task11() {
@@ -104,7 +103,7 @@ function task11() {
 }
 
 // TASK 12, Filter unique array members
-// TODO
+// TODO: implement
 
 // TASK 13, Create keyed object from array
-// TODO
+// TODO: implement
