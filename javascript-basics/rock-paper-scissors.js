@@ -3,6 +3,7 @@
 function getComputerChoice() {
     const randomNumber = Math.floor(Math.random() * 3);
     let choice;
+    
     switch (randomNumber) {
         case 0:
             choice = 'Rock';
@@ -32,6 +33,7 @@ function playRound(playerSelection, computerSelection) {
     if (computerSelection === 'Rock' && playerSelection == 'Scissors'
         || computerSelection === 'Paper' && playerSelection == 'Rock'
         || computerSelection === 'Scissors' && playerSelection == 'Paper') {
+
         computerScore++;
         return {
             code: "loss",
@@ -69,9 +71,7 @@ function game() {
     }
 }
 
-
 let buttons = document.querySelectorAll('button');
 buttons.forEach(button => {
     button.addEventListener('click', game);
 });
-
