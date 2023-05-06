@@ -46,24 +46,46 @@ function playRound(playerSelection, computerSelection) {
     };
 }
 
-const resultDiv = document.querySelector('div[id=result]');
-const resultMsgDiv = document.createElement('div');
-resultDiv.appendChild(resultMsgDiv);
-resultDiv.appendChild(document.createElement('br'));
+const resultDiv = document.getElementById('result');
+
+const resultInfo = document.createElement('div');
+resultInfo.classList.add('info');
+resultDiv.appendChild(resultInfo);
+
+const messages = document.createElement('div');
+resultDiv.appendChild(messages);
+
+function reset() {
+    computerScore = 0;
+    playerScore = 0;
+
+    resultInfo.textContent = '';
+
+    while (messages.firstChild) {
+        messages.removeChild(messages.firstChild);
+    }
+
+    resultDiv.removeChild(resultDiv.lastChild); // remove the reset button
+}
 
 function game() {
     if (playerScore < 5 && computerScore < 5) {
         const result = playRound(this.id, getComputerChoice());
 
-        resultMsgDiv.textContent = `SCORE: you: ${playerScore}, computer: ${computerScore}`;
+        resultInfo.textContent = `SCORE: you: ${playerScore}, computer: ${computerScore}`;
 
-        const div = document.createElement('div');
-        div.textContent = result.message;
-        div.classList.add(result.code);
-        resultDiv.appendChild(div);
+        const message = document.createElement('div');
+        message.textContent = result.message;
+        message.classList.add(result.code);
+        messages.appendChild(message);
 
         if (playerScore === 5 || computerScore === 5) {
-            resultMsgDiv.textContent = `GAME OVER: ${playerScore > computerScore ? 'you' : 'computer'} won.`;
+            resultInfo.textContent = `GAME OVER: ${playerScore > computerScore ? 'you' : 'computer'} won.`;
+
+            const resetBtn = document.createElement('button');
+            resetBtn.innerText = 'Reset';
+            resultDiv.appendChild(resetBtn);
+            resetBtn.addEventListener('click', reset);
         }
     }
 }

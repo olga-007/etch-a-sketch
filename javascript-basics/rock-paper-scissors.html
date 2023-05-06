@@ -10,27 +10,17 @@
     <!-- Manipulates DOM hence "defer" -->
     <script src="./rock-paper-scissors.js" defer></script>
 
-    <style>
-        .win {
-            color: green;
-        }
+    <link rel="stylesheet" href="./rock-paper-scissors.css">
 
-        .loss {
-            color: maroon;
-        }
-
-        .draw {
-            color: black;
-        }
-    </style>
 </head>
 
 <body style="background-color: lightgray;">
-    <div style="margin: 30px">
-        <button id="Rock">Rock</button>
-        <button id="Paper">Paper</button>
-        <button id="Scissors">Scissors</button>
-        <br><br>
+    <div id="container">
+        <div class="buttons">
+            <button id="Rock">Rock</button>
+            <button id="Paper">Paper</button>
+            <button id="Scissors">Scissors</button>
+        </div>
         <div id="result">
             <!-- the result will be displayed here -->
         </div>
