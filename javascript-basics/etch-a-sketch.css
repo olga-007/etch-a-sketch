@@ -12,8 +12,25 @@
 }
 
 .info {
-    align-self: center;
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
     padding: 10px 0;
+}
+
+.colorInfo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.colorLabel {
+    display: flex;
+}
+
+.colorBox {
+    height: 10px;
+    width: 10px;
 }
 
 .button {
@@ -31,10 +48,10 @@
 
 .row {
     display: flex;
-    flex:1;
+    flex: 1;
 }
 
 .cell {
-    flex:1;
+    flex: 1;
     border: 1px solid gray;
 }
