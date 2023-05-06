@@ -52,9 +52,9 @@ function setDrawingStatus(status) {
     colorLabel.textContent = status ? 'Drawing with' : 'Click the canvas to draw with';
 }
 
-function draw() {
+function draw(element) {
     if (isDrawing) {
-        this.style.backgroundColor = drawingColor;
+        element.style.backgroundColor = drawingColor;
     }
 }
 
@@ -70,7 +70,7 @@ function drawGrid() {
 
         for (let j = 0; j < gridSize; j++) {
             const cell = addNewDiv(row, 'cell');
-            cell.addEventListener('mouseover', draw);
+            cell.addEventListener('mouseover', (e) => draw(e.currentTarget));
         }
     }
 }
@@ -97,14 +97,19 @@ function changeGridDensity() {
     }
 }
 
-// TODO: bubbling
-canvas.addEventListener('click', () => {
+canvas.addEventListener('click', (e) => {
     setDrawingStatus(!isDrawing);
+    if (e.target.classList.contains('cell')) {
+        draw(e.target);
+    }
 });
 
 canvas.addEventListener('contextmenu', (e) => {
     e.preventDefault();
     invertDrawingColor();
+    if (e.target.classList.contains('cell')) {
+        draw(e.target);
+    }
 });
 
 resetBtn.addEventListener('click', drawGrid);
