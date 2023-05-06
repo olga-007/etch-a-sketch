@@ -7,7 +7,7 @@
 #container {
     display: flex;
     flex-direction: column;
-    margin: 30px;
+    margin: 30px auto;
     width: 640px;
 }
 
@@ -33,7 +33,7 @@
     width: 10px;
 }
 
-.button {
+button {
     padding: 5px 15px;
 }
 

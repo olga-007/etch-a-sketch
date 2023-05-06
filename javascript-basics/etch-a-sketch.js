@@ -1,8 +1,8 @@
 // see https://www.theodinproject.com/lessons/foundations-etch-a-sketch
 
 const gridSize = 50;
-let isDrawing = false;
-let currentColor = 'black';
+let isDrawing;
+let drawingColor;
 
 function addNewDiv(parent, cssClass) {
     const element = document.createElement('div');
@@ -18,24 +18,31 @@ const info = addNewDiv(container, 'info');
 
 const colorInfo = addNewDiv(info, 'colorInfo');
 const colorLabel = addNewDiv(colorInfo, 'colorLabel');
-colorLabel.textContent = 'Drawing with';
 const colorBox = addNewDiv(colorInfo, 'colorBox');
 
 const resetBtn = document.createElement('button');
 resetBtn.innerText = 'Reset';
-resetBtn.classList.add('button');
 info.appendChild(resetBtn);
 
 const canvas = addNewDiv(container, 'canvas');
 
-function setCurrentColor(color) {
-    currentColor = color;
+function setDrawingColor(color) {
+    drawingColor = color;
     colorBox.style.backgroundColor = color;
+}
+
+function invertDrawingColor() {
+    setDrawingColor(drawingColor === 'black' ? 'white' : 'black');
+}
+
+function setDrawingStatus(status) {
+    isDrawing = status;
+    colorLabel.textContent = status ? 'Drawing with' : 'Ready to draw with';
 }
 
 function draw() {
     if (isDrawing) {
-        this.style.backgroundColor = currentColor;
+        this.style.backgroundColor = drawingColor;
     }
 }
 
@@ -43,8 +50,8 @@ function drawGrid() {
     while (canvas.firstChild) {
         canvas.removeChild(canvas.firstChild);
     }
-    isDrawing = false;
-    setCurrentColor('black');
+    setDrawingStatus(false);
+    setDrawingColor('black');
 
     for (let i = 0; i < gridSize; i++) {
         const row = addNewDiv(canvas, 'row');
@@ -59,12 +66,12 @@ function drawGrid() {
 resetBtn.addEventListener('click', drawGrid);
 
 canvas.addEventListener('click', () => {
-    isDrawing = !isDrawing;
+    setDrawingStatus(!isDrawing);
 });
 
 canvas.addEventListener('contextmenu', (e) => {
     e.preventDefault();
-    setCurrentColor(currentColor === 'black' ? 'white' : 'black');
+    invertDrawingColor();
 });
 
 drawGrid();
