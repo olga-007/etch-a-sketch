@@ -1,5 +1,11 @@
 // see https://www.theodinproject.com/lessons/foundations-etch-a-sketch
 
+// TODO:
+// - change grid size
+// - rainbow mode
+// - shades of gray mode
+// - gallery
+
 const gridSize = 50;
 let isDrawing;
 let drawingColor;
@@ -25,6 +31,9 @@ resetBtn.innerText = 'Reset';
 info.appendChild(resetBtn);
 
 const canvas = addNewDiv(container, 'canvas');
+
+const helpText = addNewDiv(container, 'helpText');
+helpText.textContent = 'Left-click on the canvas to start/stop drawing, right-click to invert the drawing color.';
 
 function setDrawingColor(color) {
     drawingColor = color;

@@ -59,3 +59,7 @@ button {
     flex: 1;
     border: 1px solid gray;
 }
+
+.helpText {
+    padding: 10px 0;
+}
