@@ -1,5 +1,6 @@
 // see https://www.theodinproject.com/lessons/foundations-etch-a-sketch
 
+const gridSize = 50;
 let isDrawing = false;
 let currentColor = 'black';
 
@@ -9,30 +10,45 @@ function draw() {
     }
 }
 
-const container = document.getElementById('container');
+function addNewDiv(parent, cssClass) {
+    const element = document.createElement('div');
+    element.classList.add(cssClass);
+    parent.appendChild(element);
+    return element;
+}
 
-container.addEventListener('click', () => {
+const container = document.getElementById('container');
+const info = addNewDiv(container, 'info');
+const canvas = addNewDiv(container, 'canvas');
+
+canvas.addEventListener('click', () => {
     isDrawing = !isDrawing;
 });
 
-container.addEventListener('contextmenu', (e) => {
+canvas.addEventListener('contextmenu', (e) => {
     e.preventDefault();
     currentColor = currentColor === 'black' ? 'white' : 'black';
 });
 
-function drawGrid(gridSize) {
+function drawGrid() {
+    while (canvas.firstChild) {
+        canvas.removeChild(canvas.firstChild);
+    }
+
     for (let i = 0; i < gridSize; i++) {
-        const row = document.createElement('div');
-        row.classList.add('row');
-        container.appendChild(row);
+        const row = addNewDiv(canvas, 'row');
 
         for (let j = 0; j < gridSize; j++) {
-            const cell = document.createElement('div');
-            cell.classList.add('cell');
+            const cell = addNewDiv(row, 'cell');
             cell.addEventListener('mouseover', draw);
-            row.appendChild(cell);
         }
     }
 }
 
-drawGrid(50);
+const resetBtn = document.createElement('button');
+resetBtn.innerText = 'Reset';
+resetBtn.classList.add('button');
+resetBtn.addEventListener('click', drawGrid);
+info.appendChild(resetBtn);
+
+drawGrid();

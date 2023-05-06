@@ -9,6 +9,21 @@
     flex-direction: column;
     margin: 30px;
     width: 640px;
+}
+
+.info {
+    align-self: center;
+    padding: 10px 0;
+}
+
+.button {
+    padding: 5px 15px;
+}
+
+.canvas {
+    display: flex;
+    flex-direction: column;
+    width: 640px;
     height: 640px;
     background-color: white;
     border: 1px solid gray;
