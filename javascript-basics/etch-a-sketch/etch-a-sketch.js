@@ -1,12 +1,11 @@
 // see https://www.theodinproject.com/lessons/foundations-etch-a-sketch
 
 // TODO:
-// - change grid size
 // - rainbow mode
 // - shades of gray mode
 // - gallery
 
-const gridSize = 50;
+let gridSize = 50;
 let isDrawing;
 let drawingColor;
 
@@ -30,6 +29,10 @@ const resetBtn = document.createElement('button');
 resetBtn.innerText = 'Reset';
 info.appendChild(resetBtn);
 
+const changeGridBtn = document.createElement('button');
+changeGridBtn.innerText = 'Grid Density';
+info.appendChild(changeGridBtn);
+
 const canvas = addNewDiv(container, 'canvas');
 
 const helpText = addNewDiv(container, 'helpText');
@@ -46,7 +49,7 @@ function invertDrawingColor() {
 
 function setDrawingStatus(status) {
     isDrawing = status;
-    colorLabel.textContent = status ? 'Drawing with' : 'Ready to draw with';
+    colorLabel.textContent = status ? 'Drawing with' : 'Click the canvas to draw with';
 }
 
 function draw() {
@@ -72,8 +75,29 @@ function drawGrid() {
     }
 }
 
-resetBtn.addEventListener('click', drawGrid);
+function changeGridDensity() {
+    const min = 4;
+    const max = 64;
+    let newGridSize;
+    let isValidGridSize;
 
+    do {
+        // eslint-disable-next-line no-alert
+        const value = prompt(`Enter a number between ${min} and ${max}`, gridSize);
+        if (value === null) {
+            break; // cancel
+        }
+        newGridSize = +value;
+        isValidGridSize = !Number.isNaN(newGridSize) && newGridSize >= min && newGridSize <= max;
+    } while (!isValidGridSize);
+
+    if (isValidGridSize) {
+        gridSize = newGridSize;
+        drawGrid();
+    }
+}
+
+// TODO: bubbling
 canvas.addEventListener('click', () => {
     setDrawingStatus(!isDrawing);
 });
@@ -82,5 +106,9 @@ canvas.addEventListener('contextmenu', (e) => {
     e.preventDefault();
     invertDrawingColor();
 });
+
+resetBtn.addEventListener('click', drawGrid);
+
+changeGridBtn.addEventListener('click', changeGridDensity);
 
 drawGrid();
