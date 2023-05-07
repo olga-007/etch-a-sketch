@@ -8,9 +8,12 @@
 let gridSize = 50;
 let isDrawing;
 let drawingColor;
+const MODE_CLASSIC = 'Classic';
+const MODE_RAINBOW = 'Rainbow';
+let mode;
 
-function addNewDiv(parent, cssClass) {
-    const element = document.createElement('div');
+function addNewElement(type, parent, cssClass) {
+    const element = document.createElement(type);
     if (cssClass) {
         element.classList.add(cssClass);
     }
@@ -18,20 +21,42 @@ function addNewDiv(parent, cssClass) {
     return element;
 }
 
+function addNewDiv(parent, cssClass) {
+    return addNewElement('div', parent, cssClass);
+}
+
+function addNewModeRadioBtn(parent, value) {
+    const label = addNewElement('label', parent);
+
+    const modeRadioBtn = addNewElement('input', label);
+    modeRadioBtn.type = 'radio';
+    modeRadioBtn.name = 'modes';
+    modeRadioBtn.value = value;
+
+    const description = addNewDiv(label);
+    description.textContent = value;
+
+    return modeRadioBtn;
+}
+
 const container = document.getElementById('container');
 const info = addNewDiv(container, 'info');
 
 const colorInfo = addNewDiv(info, 'colorInfo');
-const colorLabel = addNewDiv(colorInfo, 'colorLabel');
+const colorLabel = addNewDiv(colorInfo);
 const colorBox = addNewDiv(colorInfo, 'colorBox');
 
-const resetBtn = document.createElement('button');
-resetBtn.innerText = 'Reset';
-info.appendChild(resetBtn);
+const modeSelector = addNewDiv(info, 'modeSelector');
+modeSelector.textContent = 'Mode:';
 
-const changeGridBtn = document.createElement('button');
+const classicModeRadioBtn = addNewModeRadioBtn(modeSelector, MODE_CLASSIC);
+const rainbowModeRadioBtn = addNewModeRadioBtn(modeSelector, MODE_RAINBOW);
+
+const resetBtn = addNewElement('button', info);
+resetBtn.innerText = 'Reset';
+
+const changeGridBtn = addNewElement('button', info);
 changeGridBtn.innerText = 'Grid Density';
-info.appendChild(changeGridBtn);
 
 const canvas = addNewDiv(container, 'canvas');
 
@@ -49,7 +74,7 @@ function invertDrawingColor() {
 
 function setDrawingStatus(status) {
     isDrawing = status;
-    colorLabel.textContent = status ? 'Drawing with' : 'Click the canvas to draw with';
+    colorLabel.textContent = status ? 'Drawing with' : 'Click to draw with';
 }
 
 function draw(element) {
@@ -63,6 +88,8 @@ function drawGrid() {
         canvas.removeChild(canvas.firstChild);
     }
     setDrawingStatus(false);
+    mode = MODE_CLASSIC;
+    classicModeRadioBtn.checked = true;
     setDrawingColor('black');
 
     for (let i = 0; i < gridSize; i++) {
