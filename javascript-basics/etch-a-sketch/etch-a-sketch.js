@@ -1,14 +1,18 @@
 // see https://www.theodinproject.com/lessons/foundations-etch-a-sketch
 
 // TODO:
-// - shades of gray mode
 // - gallery
 
-let gridSize = 50;
+const MODE_CLASSIC = 'Classic';
+const MODE_SHADES = 'Shades';
+const MODE_RAINBOW = 'Rainbow';
+const COLOR_BLACK = 'rgb(0, 0, 0)';
+const COLOR_WHITE = 'rgb(255, 255, 255)';
+
+let gridSize = 4;
 let isDrawing;
 let drawingColor;
-const MODE_CLASSIC = 'Classic';
-const MODE_RAINBOW = 'Rainbow';
+let isInverted;
 let mode;
 
 function addNewElement(type, parent, cssClass) {
@@ -63,6 +67,7 @@ const modeSelector = addNewDiv(info, 'modeSelector');
 modeSelector.textContent = 'Mode:';
 
 const classicModeRadioBtn = addNewModeRadioBtn(modeSelector, MODE_CLASSIC);
+addNewModeRadioBtn(modeSelector, MODE_SHADES);
 addNewModeRadioBtn(modeSelector, MODE_RAINBOW);
 
 const resetBtn = addNewElement('button', info);
@@ -76,13 +81,10 @@ const canvas = addNewDiv(container, 'canvas');
 const helpText = addNewDiv(container, 'helpText');
 helpText.textContent = 'Left-click on the canvas to start/stop drawing, right-click to invert the drawing color.';
 
-function setDrawingColor(color) {
-    drawingColor = color;
-    classicColorBox.style.backgroundColor = color;
-}
-
-function invertDrawingColor() {
-    setDrawingColor(drawingColor === 'black' ? 'white' : 'black');
+function setDrawingInverted(inverted) {
+    isInverted = inverted;
+    drawingColor = isInverted ? COLOR_WHITE : COLOR_BLACK;
+    classicColorBox.style.backgroundColor = drawingColor;
 }
 
 function setDrawingStatus(status) {
@@ -99,11 +101,76 @@ function switchToMode(newMode) {
     }
 }
 
+function parseRGB(rgbStr) {
+    return rgbStr.slice(rgbStr.indexOf('(') + 1, rgbStr.indexOf(')')).split(',');
+}
+
+function isShadeOfBlack(rgb) {
+    const r = +rgb[0];
+    const g = +rgb[1];
+    const b = +rgb[2];
+    return !(r || g || b);
+}
+
+function darken(element) {
+    const currentColor = element.style.backgroundColor;
+
+    if (COLOR_BLACK === currentColor) {
+        return;
+    }
+
+    if (!currentColor || COLOR_WHITE === currentColor) {
+        element.style.backgroundColor = 'rgba(0, 0, 0, 0.1)';
+        return;
+    }
+
+    const rgb = parseRGB(currentColor);
+
+    if (isShadeOfBlack(rgb)) {
+        rgb[3] = +rgb[3] + 0.1;
+        if (rgb[3] >= 1) {
+            element.style.backgroundColor = COLOR_BLACK;
+        } else {
+            element.style.backgroundColor = `rgba(${rgb.join(',')})`;
+        }
+    }
+}
+
+function lighten(element) {
+    const currentColor = element.style.backgroundColor;
+
+    if (!currentColor || COLOR_WHITE === currentColor) {
+        return;
+    }
+
+    if (COLOR_BLACK === currentColor) {
+        element.style.backgroundColor = 'rgba(0, 0, 0, 0.9)';
+        return;
+    }
+
+    const rgb = parseRGB(currentColor);
+
+    if (isShadeOfBlack(rgb)) {
+        rgb[3] = +rgb[3] - 0.1;
+        if (rgb[3] <= 0) {
+            element.style.backgroundColor = COLOR_WHITE;
+        } else {
+            element.style.backgroundColor = `rgba(${rgb.join(',')})`;
+        }
+    }
+}
+
 function draw(element) {
     if (isDrawing) {
         if (mode === MODE_RAINBOW) {
             const randomColor = Math.floor(Math.random() * 16777215).toString(16);
             element.style.backgroundColor = `#${randomColor}`;
+        } else if (mode === MODE_SHADES) {
+            if (!isInverted) {
+                darken(element);
+            } else {
+                lighten(element);
+            }
         } else {
             element.style.backgroundColor = drawingColor;
         }
@@ -117,7 +184,7 @@ function drawGrid() {
     setDrawingStatus(false);
     switchToMode(MODE_CLASSIC);
     classicModeRadioBtn.checked = true;
-    setDrawingColor('black');
+    setDrawingInverted(false);
 
     for (let i = 0; i < gridSize; i++) {
         const row = addNewDiv(canvas, 'row');
@@ -165,7 +232,7 @@ canvas.addEventListener('click', (e) => {
 canvas.addEventListener('contextmenu', (e) => {
     e.preventDefault();
     if (mode !== MODE_RAINBOW) {
-        invertDrawingColor();
+        setDrawingInverted(!isInverted);
         if (e.target.classList.contains('cell')) {
             draw(e.target);
         }

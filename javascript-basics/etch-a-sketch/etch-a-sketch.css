@@ -24,7 +24,7 @@ body {
 .colorInfo {
     display: flex;
     align-items: center;
-    width: 190px;
+    width: 170px;
     gap: 7px;
 }
 
@@ -51,7 +51,7 @@ label {
 }
 
 button {
-    padding: 5px 15px;
+    padding: 3px 10px;
 }
 
 .canvas {
