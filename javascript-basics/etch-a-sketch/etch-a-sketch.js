@@ -8,12 +8,13 @@ const MODE_SHADES = 'Shades';
 const MODE_RAINBOW = 'Rainbow';
 const COLOR_BLACK = 'rgb(0, 0, 0)';
 const COLOR_WHITE = 'rgb(255, 255, 255)';
+const SHADE_STEP = 0.2;
 
-let gridSize = 4;
+let gridSize = 50;
+let mode = MODE_CLASSIC;
 let isDrawing;
 let drawingColor;
 let isInverted;
-let mode;
 
 function addNewElement(type, parent, cssClass) {
     const element = document.createElement(type);
@@ -59,6 +60,8 @@ const colorLabel = addNewDiv(colorInfo);
 const colorBoxContainer = addNewDiv(colorInfo, 'colorBoxContainer');
 
 const classicColorBox = createNewColorBox();
+colorBoxContainer.appendChild(classicColorBox);
+
 const redColorBox = createNewColorBox('red');
 const greenColorBox = createNewColorBox('green');
 const blueColorBox = createNewColorBox('blue');
@@ -67,6 +70,7 @@ const modeSelector = addNewDiv(info, 'modeSelector');
 modeSelector.textContent = 'Mode:';
 
 const classicModeRadioBtn = addNewModeRadioBtn(modeSelector, MODE_CLASSIC);
+classicModeRadioBtn.checked = true;
 addNewModeRadioBtn(modeSelector, MODE_SHADES);
 addNewModeRadioBtn(modeSelector, MODE_RAINBOW);
 
@@ -120,14 +124,14 @@ function darken(element) {
     }
 
     if (!currentColor || COLOR_WHITE === currentColor) {
-        element.style.backgroundColor = 'rgba(0, 0, 0, 0.1)';
+        element.style.backgroundColor = `rgba(0, 0, 0, ${SHADE_STEP})`;
         return;
     }
 
     const rgb = parseRGB(currentColor);
 
     if (isShadeOfBlack(rgb)) {
-        rgb[3] = +rgb[3] + 0.1;
+        rgb[3] = +rgb[3] + SHADE_STEP;
         if (rgb[3] >= 1) {
             element.style.backgroundColor = COLOR_BLACK;
         } else {
@@ -144,14 +148,14 @@ function lighten(element) {
     }
 
     if (COLOR_BLACK === currentColor) {
-        element.style.backgroundColor = 'rgba(0, 0, 0, 0.9)';
+        element.style.backgroundColor = `rgba(0, 0, 0, ${1 - SHADE_STEP})`;
         return;
     }
 
     const rgb = parseRGB(currentColor);
 
     if (isShadeOfBlack(rgb)) {
-        rgb[3] = +rgb[3] - 0.1;
+        rgb[3] = +rgb[3] - SHADE_STEP;
         if (rgb[3] <= 0) {
             element.style.backgroundColor = COLOR_WHITE;
         } else {
@@ -182,8 +186,6 @@ function drawGrid() {
         canvas.removeChild(canvas.firstChild);
     }
     setDrawingStatus(false);
-    switchToMode(MODE_CLASSIC);
-    classicModeRadioBtn.checked = true;
     setDrawingInverted(false);
 
     for (let i = 0; i < gridSize; i++) {
