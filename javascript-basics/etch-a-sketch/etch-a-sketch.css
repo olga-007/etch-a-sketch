@@ -28,6 +28,10 @@ body {
     gap: 7px;
 }
 
+.colorBoxContainer {
+    display: flex;
+}
+
 .colorBox {
     height: 10px;
     width: 10px;

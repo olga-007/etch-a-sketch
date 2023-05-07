@@ -1,7 +1,6 @@
 // see https://www.theodinproject.com/lessons/foundations-etch-a-sketch
 
 // TODO:
-// - rainbow mode
 // - shades of gray mode
 // - gallery
 
@@ -39,18 +38,32 @@ function addNewModeRadioBtn(parent, value) {
     return modeRadioBtn;
 }
 
+function createNewColorBox(color) {
+    const colorBox = document.createElement('div');
+    colorBox.classList.add('colorBox');
+    if (color) {
+        colorBox.style.backgroundColor = color;
+    }
+    return colorBox;
+}
+
 const container = document.getElementById('container');
 const info = addNewDiv(container, 'info');
 
 const colorInfo = addNewDiv(info, 'colorInfo');
 const colorLabel = addNewDiv(colorInfo);
-const colorBox = addNewDiv(colorInfo, 'colorBox');
+const colorBoxContainer = addNewDiv(colorInfo, 'colorBoxContainer');
+
+const classicColorBox = createNewColorBox();
+const redColorBox = createNewColorBox('red');
+const greenColorBox = createNewColorBox('green');
+const blueColorBox = createNewColorBox('blue');
 
 const modeSelector = addNewDiv(info, 'modeSelector');
 modeSelector.textContent = 'Mode:';
 
 const classicModeRadioBtn = addNewModeRadioBtn(modeSelector, MODE_CLASSIC);
-const rainbowModeRadioBtn = addNewModeRadioBtn(modeSelector, MODE_RAINBOW);
+addNewModeRadioBtn(modeSelector, MODE_RAINBOW);
 
 const resetBtn = addNewElement('button', info);
 resetBtn.innerText = 'Reset';
@@ -65,7 +78,7 @@ helpText.textContent = 'Left-click on the canvas to start/stop drawing, right-cl
 
 function setDrawingColor(color) {
     drawingColor = color;
-    colorBox.style.backgroundColor = color;
+    classicColorBox.style.backgroundColor = color;
 }
 
 function invertDrawingColor() {
@@ -77,9 +90,23 @@ function setDrawingStatus(status) {
     colorLabel.textContent = status ? 'Drawing with' : 'Click to draw with';
 }
 
+function switchToMode(newMode) {
+    mode = newMode;
+    if (mode === MODE_RAINBOW) {
+        colorBoxContainer.replaceChildren(redColorBox, greenColorBox, blueColorBox);
+    } else {
+        colorBoxContainer.replaceChildren(classicColorBox);
+    }
+}
+
 function draw(element) {
     if (isDrawing) {
-        element.style.backgroundColor = drawingColor;
+        if (mode === MODE_RAINBOW) {
+            const randomColor = Math.floor(Math.random() * 16777215).toString(16);
+            element.style.backgroundColor = `#${randomColor}`;
+        } else {
+            element.style.backgroundColor = drawingColor;
+        }
     }
 }
 
@@ -88,7 +115,7 @@ function drawGrid() {
         canvas.removeChild(canvas.firstChild);
     }
     setDrawingStatus(false);
-    mode = MODE_CLASSIC;
+    switchToMode(MODE_CLASSIC);
     classicModeRadioBtn.checked = true;
     setDrawingColor('black');
 
@@ -124,6 +151,10 @@ function changeGridDensity() {
     }
 }
 
+modeSelector.addEventListener('change', (e) => {
+    switchToMode(e.target.value);
+});
+
 canvas.addEventListener('click', (e) => {
     setDrawingStatus(!isDrawing);
     if (e.target.classList.contains('cell')) {
@@ -133,9 +164,11 @@ canvas.addEventListener('click', (e) => {
 
 canvas.addEventListener('contextmenu', (e) => {
     e.preventDefault();
-    invertDrawingColor();
-    if (e.target.classList.contains('cell')) {
-        draw(e.target);
+    if (mode !== MODE_RAINBOW) {
+        invertDrawingColor();
+        if (e.target.classList.contains('cell')) {
+            draw(e.target);
+        }
     }
 });
 
