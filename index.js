@@ -192,8 +192,7 @@ function drawGrid() {
         const row = addNewDiv(canvas, 'row');
 
         for (let j = 0; j < gridSize; j++) {
-            const cell = addNewDiv(row, 'cell');
-            cell.addEventListener('mouseover', (e) => draw(e.currentTarget));
+            addNewDiv(row, 'cell');
         }
     }
 }
@@ -220,24 +219,30 @@ function changeGridDensity() {
     }
 }
 
+function drawIfCell(element) {
+    if (element.classList.contains('cell')) {
+        draw(element);
+    }
+}
+
 modeSelector.addEventListener('change', (e) => {
     switchToMode(e.target.value);
 });
 
+canvas.addEventListener('mouseover', (e) => {
+    drawIfCell(e.target);
+});
+
 canvas.addEventListener('click', (e) => {
     setDrawingStatus(!isDrawing);
-    if (e.target.classList.contains('cell')) {
-        draw(e.target);
-    }
+    drawIfCell(e.target);
 });
 
 canvas.addEventListener('contextmenu', (e) => {
     e.preventDefault();
     if (mode !== MODE_RAINBOW) {
         setDrawingInverted(!isInverted);
-        if (e.target.classList.contains('cell')) {
-            draw(e.target);
-        }
+        drawIfCell(e.target);
     }
 });
 
