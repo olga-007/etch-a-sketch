@@ -1,8 +1,5 @@
 // see https://www.theodinproject.com/lessons/foundations-etch-a-sketch
 
-// TODO:
-// - gallery
-
 const MODE_CLASSIC = 'Classic';
 const MODE_SHADES = 'Shades';
 const MODE_RAINBOW = 'Rainbow';
@@ -84,6 +81,11 @@ const canvas = addNewDiv(container, 'canvas');
 
 const helpText = addNewDiv(container, 'helpText');
 helpText.textContent = 'Left-click on the canvas to start/stop drawing, right-click to invert the drawing color.';
+
+const gallery = addNewDiv(container, 'gallery');
+const galleryLink = addNewElement('a', gallery);
+galleryLink.textContent = 'Go to the gallery';
+galleryLink.href = './gallery/index.html';
 
 function setDrawingInverted(inverted) {
     isInverted = inverted;

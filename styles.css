@@ -76,3 +76,20 @@ button {
 .helpText {
     padding: 10px 0;
 }
+
+.gallery {
+    display: flex;
+    text-align: center;
+    height: 50px;
+}
+
+a {
+    margin: auto;
+    text-decoration: none;
+    color: black;
+    font-size: 20px;
+}
+
+a:hover {
+    font-size: 22px
+}
